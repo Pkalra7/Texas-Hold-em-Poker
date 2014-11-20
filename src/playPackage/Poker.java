@@ -1,5 +1,7 @@
+package playPackage;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
@@ -14,68 +16,27 @@ public class Poker extends AbstractServer {
 	boolean playing = false;
 	private static int DEFAULT_PORT = 5555;
 	private String[] move;
-
+	private ArrayList playerList;
+	private Round round;
 	public Poker(int port) {
 		super(port);
+		playerList = new ArrayList();
+
 	}
 
 	public Poker(){
 		super(DEFAULT_PORT);
+		playerList = new ArrayList();
 	}
 
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		String message = (String) msg;
-		if (message.contains("fold")|| message.contains("Check") || message.contains("Raise") || message.contains("Call")){
+		if ((message.contains("fold")|| message.contains("Check") || message.contains("Raise") || message.contains("Call"))&& playing){
 			move[Arrays.asList(this.getClientConnections()).indexOf(client)] = message;
-			
-		}
-			
-		if (((String) msg).contains("New Round")){
-			playing = true;
-		}
-		while (playing){
-			Thread[] thread = this.getClientConnections();
-			ConnectionToClient[] clientList = (ConnectionToClient[]) thread;
-			Dealer dealer;
-			Poker poker;
+			System.out.println(message);
 
-			dealer = new Dealer(this);
-			dealer.createDeck();
-			for (int j =0; j<2; j++){
-				for (int i=0; i<clientList.length; i++){
-					try {
-						clientList[i].sendToClient(dealer.deal());
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-					}
-				}
-			}
-			
-			for (int i =0 ; i<clientList.length; i++){
-			{
-				while(move[i]== null){	
-			}
-				if (move[i].contains("fold")){
-					//TODO implement
-				}
-				
-				if (move[i].contains("raise")){
-					
-					
-				}
-				
-				if (move[i].contains("call")){
-				}
-				
-				if (move[i].contains("check")){
-					
-				}
-				}
-			}
-			
-			playing = false;
 		}
 
 		System.out.println("Message received: " + msg + " from "
@@ -84,9 +45,8 @@ public class Poker extends AbstractServer {
 	}
 
 
-	private void sendCardToPlayer(Card card){
 
-	}
+
 	public void sendToClient(Object msg, ConnectionToClient client){
 		try {
 			client.sendToClient(msg);
@@ -95,10 +55,13 @@ public class Poker extends AbstractServer {
 	}
 
 	protected void clientConnected(ConnectionToClient client) {
+
 		System.out.println("Client connected");
+		playerList.add(client);
+		System.out.println(client.getClass());
 	}
 
-	@Override
+	@Override 
 	synchronized protected void clientException(ConnectionToClient client,
 			Throwable exception) {
 		System.out.println(""+client.getInfo("#login") +'\t'+ "Disconnected");
@@ -113,8 +76,13 @@ public class Poker extends AbstractServer {
 		} catch (Exception ex) {
 			System.out.println("ERROR - Could not listen for clients!");
 		}
+		Round round = new Round(poker);
+		round.play();
 		ServerConsole sc = new ServerConsole(poker);
 		sc.accept();
+
+
+
 	}
 
 	@Override

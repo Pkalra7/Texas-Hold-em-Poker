@@ -1,4 +1,6 @@
+package playPackage;
 import java.io.*;
+import java.util.ArrayList;
 
 import ocsf.server.AbstractServer;
 import client.*;
@@ -6,9 +8,11 @@ import common.*;
 
 public class ServerConsole<E> implements ChatIF {
 
-	Poker poker;
+	private Poker poker;
+	private ArrayList playerList;
 	private AbstractServer as;
 	public ServerConsole(AbstractServer as) {
+		playerList = new ArrayList();
 		this.as = as;
 	}
 

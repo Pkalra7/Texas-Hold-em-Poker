@@ -9,6 +9,8 @@ import common.*;
 
 import java.io.*;
 
+import playPackage.Card;
+
 /**
  * This class overrides some of the methods defined in the abstract superclass
  * in order to give more functionality to the client.
@@ -26,8 +28,7 @@ public class ChatClient extends AbstractClient {
 	 * method in the client.
 	 */
 	ChatIF clientUI;
-	String loginID;
-
+	
 	// Constructors ****************************************************
 
 	/**
@@ -42,14 +43,12 @@ public class ChatClient extends AbstractClient {
 	 * @param loginID
 	 */
 
-	public ChatClient(String host, int port, ChatIF clientUI, String loginID)
+	public ChatClient(String host, int port, ChatIF clientUI)
 			throws IOException {
 
 		super(host, port); // Call the superclass constructor
-		if (loginID == null) {
-			System.exit(0);
-		}
-		this.loginID = loginID;
+
+		
 		this.clientUI = clientUI;
 
 		openConnection();
@@ -64,7 +63,7 @@ public class ChatClient extends AbstractClient {
 	 *            The message from the server.
 	 */
 	public void handleMessageFromServer(Object msg) {
-		clientUI.display(msg.toString());
+			clientUI.display(msg.toString());
 
 	}
 
@@ -183,6 +182,7 @@ public class ChatClient extends AbstractClient {
 	 */
 	protected void connectionException(Exception exception) {
 		System.out.println("SERVER SHUTTING DOWN! DISCONNECTING!" + '\n' + "Abnormal termination of connection.");
+		exception.printStackTrace();
 		quit();
 	}
 
@@ -191,7 +191,7 @@ public class ChatClient extends AbstractClient {
 	}
 
 	protected void connectionEstablished() {
-		System.out.println("connecting...");
+	/*	System.out.println("connecting...");
 
 		String login = ("#login <" + this.loginID + ">");
 		try {
@@ -199,7 +199,7 @@ public class ChatClient extends AbstractClient {
 		} catch (IOException e) {
 			System.out.println("Cannot send ID to server");
 		}
-
+*/
 		System.out.println("You have succesffuly connected");
 
 	}

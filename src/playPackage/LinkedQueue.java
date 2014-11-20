@@ -1,3 +1,4 @@
+package playPackage;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -45,7 +46,8 @@ public class LinkedQueue<E> implements Iterable<E> {
 	 * @throws java.util.NoSuchElementException if this queue is empty
 	 */
 	public E peek() {
-		if (isEmpty()) throw new NoSuchElementException("Queue underflow");
+		if (isEmpty())
+			return null;
 		return first.E;
 	}
 

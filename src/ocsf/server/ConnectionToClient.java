@@ -8,6 +8,8 @@ import java.io.*;
 import java.net.*;
 import java.util.HashMap;
 
+import playPackage.Hand;
+
 /**
  * An instance of this class is created by the server when a client connects. It
  * accepts messages coming from the client and is responsible for sending data
@@ -78,12 +80,17 @@ public class ConnectionToClient extends Thread {
 	 *            a reference to the server that created this instance
 	 * @exception IOException
 	 *                if an I/O error occur when creating the connection.
+	 *                
 	 */
-	ConnectionToClient(ThreadGroup group, Socket clientSocket, AbstractServer server) throws IOException {
+	
+	Hand hand; //Added by Scott
+	
+	protected ConnectionToClient(ThreadGroup group, Socket clientSocket, AbstractServer server) throws IOException {
 		super(group, (Runnable) null);
 		// Initialize variables
 		this.clientSocket = clientSocket;
 		this.server = server;
+		hand = new Hand(this);///Added by Scott
 
 		clientSocket.setSoTimeout(0); // make sure timeout is infinite
 
@@ -266,7 +273,11 @@ public class ConnectionToClient extends Thread {
 		} catch (IOException e) {
 		}
 	}
-
+//Added By David
+	public Hand getHand() {
+	return hand;
+	}
+//Finished Addition
 
 }
 // End of ConnectionToClient class
